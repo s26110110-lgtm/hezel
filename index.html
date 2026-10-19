@@ -1,470 +1,522 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="./style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pen</title>
-  </head>
-  <body>
-
-    <script src="./script.js"></script>
-  </body>
-</html>
-<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>朋友對我的動態留言板 💜</title>
-  
-  <!-- 引入 Google Fonts 可愛圓潤字體 (Zen Maru Gothic) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberQuest // 作品集入口網站</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+TC:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff0055;
+            --neon-yellow: #fcee0a;
+            --neon-green: #00ff66;
+            --dark-bg: #0a0a12;
+            --card-bg: rgba(18, 18, 32, 0.75);
+            --locked-color: #2a2a3a;
+        }
 
-  <style>
-    /* =========================================================
-       【1. 主題配色與變數定義】
-       在這裡可以輕鬆調整藍紫色的色彩氛圍！
-       ========================================================= */
-    :root {
-      /* 網頁主背景與漸層色 */
-      --bg-gradient-1: #e0c3fc; /* 淺紫 */
-      --bg-gradient-2: #8ec5fc; /* 淺藍 */
-      
-      /* 文字顏色 */
-      --text-main: #4a3e6d;     /* 深藍紫 */
-      --text-muted: #8c82a6;    /* 淺藍紫 */
-      
-      /* 卡片配色 */
-      --card-bg: rgba(255, 255, 255, 0.85); /* 半透明奶白色 */
-      --card-border: #d4c5f9;  /* 卡片預設邊框 */
-      
-      /* 高亮 / 輪播發光顏色 (焦點特效) */
-      --highlight-border: #7b2cbf; /* 焦點深紫色邊框 */
-      --highlight-glow: rgba(157, 78, 221, 0.6); /* 焦點發光暈影 */
-      --highlight-accent: #ff9ebb; /* 焦點可愛粉紅點綴 */
-      
-      /* 動畫時間與字體 */
-      --transition-speed: 0.5s;
-      --font-family: 'Zen Maru Gothic', -apple-system, sans-serif;
-    }
+        body {
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            font-family: 'Share Tech Mono', 'Noto Sans TC', monospace;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(0, 243, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 85, 0.08) 0%, transparent 50%),
+                linear-gradient(to bottom, rgba(10, 10, 18, 0.95), rgba(10, 10, 18, 0.98));
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        /* Scanline Overlay */
+        .scanline {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0, 0, 0, 0.3) 50%,
+                rgba(0, 0, 0, 0.3)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.6;
+        }
 
-    body {
-      font-family: var(--font-family);
-      background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
-      min-height: 100vh;
-      color: var(--text-main);
-      padding: 2rem 1rem;
-      overflow-x: hidden;
-    }
+        /* Grid Background pattern */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
 
-    /* 頁面標題區塊 */
-    .header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+        .avatar-frame {
+            position: relative;
+            padding: 4px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink));
+            clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
+            animation: pulseGlow 3s infinite alternate;
+        }
 
-    .header h1 {
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: var(--text-main);
-      text-shadow: 2px 2px 0px #ffffff;
-      display: inline-block;
-      position: relative;
-    }
+        .avatar-img {
+            clip-path: polygon(14% 0, 100% 0, 100% 84%, 86% 100%, 0 100%, 0 14%);
+            filter: grayscale(20%) contrast(110%);
+            transition: all 0.3s ease;
+        }
 
-    .header p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-top: 0.5rem;
-    }
+        .avatar-frame:hover .avatar-img {
+            filter: grayscale(0%) contrast(120%);
+            transform: scale(1.03);
+        }
 
-    /* 容器設定 */
-    .container {
-      max-w: 1200px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
+            100% { box-shadow: 0 0 25px rgba(255, 0, 85, 0.6); }
+        }
 
-    /* =========================================================
-       【2. 載入中酷炫動畫 (Loading Screen)】
-       ========================================================= */
-    #loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 4rem 1rem;
-      gap: 1.5rem;
-    }
+        /* Title Glitch Text Effect */
+        .glitch-title {
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px rgba(0, 243, 255, 0.5);
+            position: relative;
+        }
 
-    /* 旋轉可愛雙環動畫 */
-    .spinner {
-      width: 60px;
-      height: 60px;
-      border: 5px solid rgba(255, 255, 255, 0.6);
-      border-top: 5px solid var(--highlight-border);
-      border-bottom: 5px solid var(--highlight-accent);
-      border-radius: 50%;
-      animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-    }
+        /* Unlocked Cyber Card */
+        .quest-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            backdrop-filter: blur(8px);
+            clip-path: polygon(0 0, 90% 0, 100% 15%, 100% 100%, 10% 100%, 0 85%);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .loading-text {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text-main);
-      animation: pulse 1.5s ease-in-out infinite alternate;
-    }
+        .quest-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+        .quest-card:hover::before {
+            left: 100%;
+        }
 
-    @keyframes pulse {
-      0% { opacity: 0.6; transform: scale(0.98); }
-      100% { opacity: 1; transform: scale(1.02); }
-    }
+        .quest-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4), inset 0 0 15px rgba(0, 243, 255, 0.2);
+        }
 
-    /* =========================================================
-       【3. 瀑布流排版 (Masonry Layout)】
-       使用 CSS Column-count 實現高低錯落效果
-       ========================================================= */
-    .masonry-wall {
-      column-count: 3;       /* 桌機顯示 3 欄 */
-      column-gap: 1.5rem;     /* 欄位間距 */
-      width: 100%;
-      display: none;          /* 預設隱藏，資料載入後顯示 */
-    }
+        .quest-card.w2-card:hover {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4), inset 0 0 15px rgba(255, 0, 85, 0.2);
+        }
 
-    /* RWD 響應式欄位調整 */
-    @media (max-width: 900px) {
-      .masonry-wall { column-count: 2; } /* 平板 2 欄 */
-    }
-    @media (max-width: 600px) {
-      .masonry-wall { column-count: 1; } /* 手機 1 欄 */
-    }
+        .quest-card.w3-card:hover {
+            border-color: var(--neon-yellow);
+            box-shadow: 0 0 20px rgba(252, 238, 10, 0.4), inset 0 0 15px rgba(252, 238, 10, 0.2);
+        }
 
-    /* =========================================================
-       【4. 留言卡片樣式與焦點 (Highlight) 特效】
-       ========================================================= */
-    .message-card {
-      break-inside: avoid;    /* 避免卡片跨欄斷裂 */
-      margin-bottom: 1.5rem;
-      background: var(--card-bg);
-      border: 2px solid var(--card-border);
-      border-radius: 20px;
-      padding: 1.5rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-      backdrop-filter: blur(10px);
-      
-      /* 平滑過渡動畫 (焦點切換時順暢變形) */
-      transition: transform var(--transition-speed) ease,
-                  box-shadow var(--transition-speed) ease,
-                  border-color var(--transition-speed) ease,
-                  filter var(--transition-speed) ease,
-                  opacity var(--transition-speed) ease;
-      
-      position: relative;
-      cursor: pointer;
-    }
+        .quest-card.w4-card:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.4), inset 0 0 15px rgba(0, 255, 102, 0.2);
+        }
 
-    /* 卡片頭部 (名字與時間) */
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.8rem;
-      border-bottom: 2px dashed #ece6ff;
-      padding-bottom: 0.5rem;
-    }
+        /* Locked Card */
+        .locked-card {
+            background: rgba(15, 15, 22, 0.6);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            clip-path: polygon(0 0, 90% 0, 100% 15%, 100% 100%, 10% 100%, 0 85%);
+            color: #555566;
+            cursor: not-allowed;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
 
-    .user-name {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
+        .locked-card:hover {
+            border-color: rgba(255, 0, 85, 0.3);
+            background: rgba(25, 15, 22, 0.7);
+        }
 
-    /* 名字前可愛的小圓點裝飾 */
-    .user-name::before {
-      content: '✦';
-      color: var(--highlight-accent);
-    }
+        /* HUD Lines & Accents */
+        .hud-corner {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-color: var(--neon-cyan);
+        }
+        .hud-tl { top: 2px; left: 2px; border-top: 2px solid; border-left: 2px solid; }
+        .hud-br { bottom: 2px; right: 2px; border-bottom: 2px solid; border-right: 2px solid; }
 
-    .post-time {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
+        /* Badge status */
+        .status-badge {
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            padding: 2px 6px;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+        }
 
-    /* 留言內容 */
-    .card-body {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: #332c4a;
-      white-space: pre-wrap; /* 保留換行 */
-      word-break: break-word; /* 避免長英文打破版面 */
-    }
-
-    /* ---------------------------------------------------------
-       【重點】輪播焦點 (Highlight) 特效樣式
-       --------------------------------------------------------- */
-    /* 1. 當卡片被選中 (Focused / Highlighted) */
-    .message-card.highlight {
-      transform: scale(1.06); /* 放大卡片 */
-      border-color: var(--highlight-border);
-      box-shadow: 0 0 25px var(--highlight-glow), 0 12px 30px rgba(0, 0, 0, 0.15);
-      filter: blur(0px) brightness(1.05);
-      opacity: 1;
-      z-index: 10; /* 保證放大時在最上層 */
-    }
-
-    /* 焦點卡片右上角的「目前展出」星號徽章 */
-    .message-card.highlight::after {
-      content: '💖 SpotLight';
-      position: absolute;
-      top: -12px;
-      right: 15px;
-      background: var(--highlight-accent);
-      color: white;
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(255, 158, 187, 0.5);
-    }
-
-    /* 2. 當有卡片處於高亮時，其他「未被選中」卡片的背景模糊與暗化效果 */
-    .masonry-wall.has-active-card .message-card:not(.highlight) {
-      filter: blur(1.5px) opacity(0.5); /* 輕微模糊並降低透明度 */
-      transform: scale(0.97);
-    }
-  </style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f1f33;
+            border: 1px solid var(--neon-cyan);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-cyan);
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen bg-grid flex flex-col justify-between relative p-4 sm:p-8">
 
-  <div class="container">
-    <!-- 標題區 -->
-    <header class="header">
-      <h1>✨ 朋友對我的悄悄話留言牆 ✨</h1>
-      <p>每隔幾秒鐘，將為您展覽每一位朋友的心聲～</p>
+    <!-- Scanline Effect -->
+    <div class="scanline"></div>
+
+    <header class="max-w-4xl mx-auto w-full text-center mt-6 mb-10 relative z-10">
+        <!-- Player Level / System Header -->
+        <div class="flex items-center justify-between text-xs text-cyan-400/60 mb-6 font-mono border-b border-cyan-500/20 pb-2">
+            <span class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                SYSTEM: ONLINE
+            </span>
+            <span class="tracking-widest">USER_ID: #DEV-2026-X</span>
+            <span>LEVEL: 04 / 18</span>
+        </div>
+
+        <!-- Avatar Container -->
+        <div class="relative inline-block mb-4">
+            <div class="avatar-frame w-32 h-32 sm:w-40 sm:h-40 mx-auto">
+                <img 
+                    src="https://i.postimg.cc/7hbjjRKL/unnamed.jpg" 
+                    alt="Developer Avatar" 
+                    class="avatar-img w-full h-full object-cover"
+                    onerror="this.src='https://via.placeholder.com/150/0a0a12/00f3ff?text=AVATAR'"
+                />
+            </div>
+            <!-- Tech Badge below avatar -->
+            <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-black border border-cyan-400 text-cyan-400 text-[10px] px-3 py-0.5 rounded-full uppercase tracking-wider shadow-lg shadow-cyan-500/50">
+                Web Architect
+            </div>
+        </div>
+
+        <!-- Name & Title -->
+        <h1 class="glitch-title text-3xl sm:text-5xl font-black tracking-wider text-white mt-4 mb-2">
+            CYBER<span class="text-cyan-400">_PORTFOLIO</span>
+        </h1>
+        <p class="text-xs sm:text-sm text-gray-400 max-w-md mx-auto font-mono tracking-wide">
+            &lt;網頁程式設計專案任務日誌 // 點擊卡片載入關卡 /&gt;
+        </p>
     </header>
 
-    <!-- 載入中動畫區塊 -->
-    <div id="loading">
-      <div class="spinner"></div>
-      <div class="loading-text">讀取留言中，請稍候... 💜</div>
-    </div>
+    <main class="max-w-6xl mx-auto w-full mb-12 relative z-10">
+        <!-- Section Bar -->
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-sm font-bold tracking-widest text-cyan-400 flex items-center gap-2">
+                <span class="text-pink-500">▶</span> MISSION_LOGS (18)
+            </h2>
+            <div class="h-[1px] flex-1 bg-gradient-to-r from-cyan-500/40 to-transparent ml-4"></div>
+        </div>
 
-    <!-- 留言瀑布流牆 -->
-    <main id="masonryWall" class="masonry-wall"></main>
-  </div>
+        <!-- Responsive Grid for 18 Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
 
-  <script>
-    /* =========================================================
-       【可供後續修改的參數設定】
-       ========================================================= */
-    // 1. Google 試算表 CSV 網址
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR3tnZwuNLulaLdIzrkJNZsHsRrX7BaYJHDRUPNGLSAIN3ig6SVSvwua-K7X9j8HJF2LWbL94Gc5LJL/pub?output=csv';
-    
-    // 2. 輪播切換時間 (單位：毫秒)，預設 3000ms = 3 秒
-    const ROTATE_INTERVAL = 3000; 
+            <!-- ================= UNLOCKED QUESTS ================= -->
+            
+            <!-- Week 1 (Active) -->
+            <a href="w1/index.html" class="quest-card p-4 flex flex-col justify-between min-h-[130px] group">
+                <div class="hud-corner hud-tl"></div>
+                <div class="hud-corner hud-br"></div>
+                
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-bold text-cyan-400 font-mono">STAGE_01</span>
+                    <span class="status-badge bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 font-bold">CLEARED</span>
+                </div>
+                
+                <div>
+                    <h3 class="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
+                        Week 1 - 數位名片
+                    </h3>
+                    <p class="text-[11px] text-gray-400 mt-1 font-mono">個人簡介與社交連結卡片</p>
+                </div>
 
-    // 全域變數
-    let messagesData = [];
-    let currentIndex = 0;
-    let timerId = null;
+                <div class="flex justify-end items-center mt-3 pt-2 border-t border-cyan-500/20 text-xs text-cyan-400 group-hover:translate-x-1 transition-transform">
+                    ENTER STAGE ➔
+                </div>
+            </a>
 
-    /* =========================================================
-       【功能 A】CSV 安全解析器 (含處理雙引號與逗號)
-       ========================================================= */
-    function parseCSV(text) {
-      const lines = text.trim().split('\n');
-      const result = [];
+            <!-- Week 2 (Active) -->
+            <a href="w2/index.html" class="quest-card w2-card p-4 flex flex-col justify-between min-h-[130px] group">
+                <div class="hud-corner hud-tl" style="border-color: var(--neon-pink);"></div>
+                <div class="hud-corner hud-br" style="border-color: var(--neon-pink);"></div>
 
-      lines.forEach((line, index) => {
-        // 跳過 CSV 標題列 (Header)
-        if (index === 0 && (line.includes('時間戳記') || line.includes('Timestamp'))) return;
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-bold text-pink-500 font-mono">STAGE_02</span>
+                    <span class="status-badge bg-pink-500/20 text-pink-300 border border-pink-400/50 font-bold">CLEARED</span>
+                </div>
 
-        const row = [];
-        let insideQuotes = false;
-        let entry = '';
+                <div>
+                    <h3 class="text-base font-bold text-white group-hover:text-pink-300 transition-colors">
+                        Week 2 - 今天吃甚麼
+                    </h3>
+                    <p class="text-[11px] text-gray-400 mt-1 font-mono">隨機美食決策產生器</p>
+                </div>
 
-        for (let i = 0; i < line.length; i++) {
-          const char = line[i];
+                <div class="flex justify-end items-center mt-3 pt-2 border-t border-pink-500/20 text-xs text-pink-400 group-hover:translate-x-1 transition-transform">
+                    ENTER STAGE ➔
+                </div>
+            </a>
 
-          if (char === '"') {
-            insideQuotes = !insideQuotes; // 切換雙引號狀態
-          } else if (char === ',' && !insideQuotes) {
-            row.push(entry.trim());
-            entry = '';
-          } else {
-            entry += char;
-          }
-        }
-        row.push(entry.trim());
+            <!-- Week 3 (Active) -->
+            <a href="w3/index.html" class="quest-card w3-card p-4 flex flex-col justify-between min-h-[130px] group">
+                <div class="hud-corner hud-tl" style="border-color: var(--neon-yellow);"></div>
+                <div class="hud-corner hud-br" style="border-color: var(--neon-yellow);"></div>
 
-        // 清除儲存格內容前後多餘的雙引號
-        const cleanRow = row.map(item => item.replace(/^"(.*)"$/, '$1').replace(/""/g, '"'));
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-bold text-yellow-400 font-mono">STAGE_03</span>
+                    <span class="status-badge bg-yellow-500/20 text-yellow-300 border border-yellow-400/50 font-bold">CLEARED</span>
+                </div>
 
-        // 依欄位順序儲存：[0]時間戳記, [1]名字, [2]悄悄話
-        if (cleanRow.length >= 3) {
-          result.push({
-            timestamp: cleanRow[0] || '剛剛',
-            name: cleanRow[1] || '無名氏',
-            content: cleanRow[2] || '這是一則空白留言~'
-          });
-        }
-      });
+                <div>
+                    <h3 class="text-base font-bold text-white group-hover:text-yellow-300 transition-colors">
+                        Week 3 - 迷因產生器
+                    </h3>
+                    <p class="text-[11px] text-gray-400 mt-1 font-mono">自訂文字與圖片梗圖產生器</p>
+                </div>
 
-      return result;
-    }
+                <div class="flex justify-end items-center mt-3 pt-2 border-t border-yellow-500/20 text-xs text-yellow-400 group-hover:translate-x-1 transition-transform">
+                    ENTER STAGE ➔
+                </div>
+            </a>
 
-    /* =========================================================
-       【功能 B】動態渲染卡片至頁面
-       ========================================================= */
-    function renderCards(data) {
-      const wall = document.getElementById('masonryWall');
-      const loading = document.getElementById('loading');
+            <!-- Week 4 (Active) -->
+            <a href="w4/index.html" class="quest-card w4-card p-4 flex flex-col justify-between min-h-[130px] group">
+                <div class="hud-corner hud-tl" style="border-color: var(--neon-green);"></div>
+                <div class="hud-corner hud-br" style="border-color: var(--neon-green);"></div>
 
-      // 隱藏載入中動畫，顯示瀑布流牆
-      loading.style.display = 'none';
-      wall.style.display = 'block';
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-bold text-emerald-400 font-mono">STAGE_04</span>
+                    <span class="status-badge bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 font-bold">CLEARED</span>
+                </div>
 
-      if (data.length === 0) {
-        wall.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">目前還沒有收到留言喔！</p>';
-        return;
-      }
+                <div>
+                    <h3 class="text-base font-bold text-white group-hover:text-emerald-300 transition-colors">
+                        Week 4 - 悄悄話
+                    </h3>
+                    <p class="text-[11px] text-gray-400 mt-1 font-mono">加密解密與匿名訊息發送</p>
+                </div>
 
-      // 動態組裝每張卡片 HTML
-      wall.innerHTML = data.map((item, index) => `
-        <article class="message-card" data-index="${index}">
-          <div class="card-header">
-            <span class="user-name">${escapeHTML(item.name)}</span>
-            <span class="post-time">${formatDate(item.timestamp)}</span>
-          </div>
-          <div class="card-body">${escapeHTML(item.content)}</div>
-        </article>
-      `).join('');
+                <div class="flex justify-end items-center mt-3 pt-2 border-t border-emerald-500/20 text-xs text-emerald-400 group-hover:translate-x-1 transition-transform">
+                    ENTER STAGE ➔
+                </div>
+            </a>
 
-      // 為卡片加上滑鼠移入點擊事件 (可手動選擇卡片)
-      const cards = document.querySelectorAll('.message-card');
-      cards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-          const idx = parseInt(card.getAttribute('data-index'));
-          setHighlightCard(idx);
-          stopCarousel(); // 滑鼠游標移入時暫停輪播
-        });
+            <!-- ================= LOCKED QUESTS (5 - 18) ================= -->
 
-        card.addEventListener('mouseleave', () => {
-          startCarousel(); // 滑鼠游標離開時恢復自動輪播
-        });
-      });
+            <!-- Week 5 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_05</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 5 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-      // 啟動自動輪播特效
-      startCarousel();
-    }
+            <!-- Week 6 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_06</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 6 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-    /* =========================================================
-       【功能 C】輪播 Highlight 焦點控制 logic
-       ========================================================= */
-    function setHighlightCard(index) {
-      const wall = document.getElementById('masonryWall');
-      const cards = document.querySelectorAll('.message-card');
+            <!-- Week 7 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_07</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 7 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-      if (cards.length === 0) return;
+            <!-- Week 8 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_08</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 8 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">期中專案展示 (MIDTERM)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-      // 加上父容器 class，啟動「未被選中卡片變暗變模糊」CSS
-      wall.classList.add('has-active-card');
+            <!-- Week 9 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_09</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 9 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-      // 移除所有卡片的 highlight 類別
-      cards.forEach(card => card.classList.remove('highlight'));
+            <!-- Week 10 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_10</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 10 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-      // 為當前目標卡片加上 highlight
-      if (cards[index]) {
-        cards[index].classList.add('highlight');
-        currentIndex = index;
-      }
-    }
+            <!-- Week 11 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_11</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 11 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-    // 啟動輪播定時器 (setInterval)
-    function startCarousel() {
-      if (timerId) clearInterval(timerId);
+            <!-- Week 12 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_12</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 12 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-      timerId = setInterval(() => {
-        if (messagesData.length === 0) return;
+            <!-- Week 13 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_13</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 13 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-        // 計算下一個高亮卡片的索引 (循環播放)
-        currentIndex = (currentIndex + 1) % messagesData.length;
-        setHighlightCard(currentIndex);
+            <!-- Week 14 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_14</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 14 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-      }, ROTATE_INTERVAL); // 秒數依據開頭定義的 ROTATE_INTERVAL
-    }
+            <!-- Week 15 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_15</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 15 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-    // 暫停輪播
-    function stopCarousel() {
-      if (timerId) {
-        clearInterval(timerId);
-        timerId = null;
-      }
-    }
+            <!-- Week 16 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_16</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 16 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-    /* =========================================================
-       【功能 D】工具函式 (防 XSS 攻擊 & 時間格式化)
-       ========================================================= */
-    function escapeHTML(str) {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
+            <!-- Week 17 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-gray-600">STAGE_17</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 17 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                </div>
+                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
+            </div>
 
-    function formatDate(timeStr) {
-      // 簡單修飾 Google 表單傳回的時間格式
-      if (!timeStr) return '';
-      const parts = timeStr.split(' ');
-      return parts[0] ? parts[0] : timeStr;
-    }
+            <!-- Week 18 -->
+            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono text-yellow-600/70">STAGE_18</span>
+                    <span class="text-sm">🔒</span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-gray-500">Week 18 - 未解鎖</h3>
+                    <p class="text-[11px] text-gray-600 mt-1">期末終極專案 (FINAL)</p>
+                </div>
+                <div class="text-[10px] text-yellow-600/50 tracking-widest text-right mt-2 font-mono">FINAL_BOSS</div>
+            </div>
 
-    /* =========================================================
-       【功能 E】初始化：使用 fetch 抓取 Google 試算表 CSV
-       ========================================================= */
-    async function init() {
-      try {
-        const response = await fetch(CSV_URL);
-        if (!response.ok) throw new Error('無法讀取 Google 試算表資料');
+        </div>
+    </main>
 
-        const csvData = await response.text();
-        messagesData = parseCSV(csvData);
+    <footer class="max-w-4xl mx-auto w-full text-center text-xs text-gray-500 font-mono py-6 border-t border-white/5 relative z-10">
+        <p class="hover:text-cyan-400 transition-colors cursor-default">
+            &copy; 2026 CYBERQUEST PORTFOLIO // ALL RIGHTS RESERVED.
+        </p>
+        <p class="text-[10px] text-gray-600 mt-1">DESIGNED FOR WEB PROGRAMMING COURSE</p>
+    </footer>
 
-        // 渲染畫面
-        renderCards(messagesData);
-
-      } catch (error) {
-        console.error('Fetch Error:', error);
-        document.getElementById('loading').innerHTML = `
-          <div style="color: #ff0055; text-align: center;">
-            <p>❌ 留言資料載入失敗</p>
-            <p style="font-size:0.8rem; margin-top:5px; color:var(--text-muted);">${error.message}</p>
-          </div>
-        `;
-      }
-    }
-
-    // 頁面 Ready 後開始執行
-    window.addEventListener('DOMContentLoaded', init);
-  </script>
 </body>
 </html>
