@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pen</title>
+  </head>
+  <body>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人數位名片</title>
+    <!-- 引入 Font Awesome 圖示庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- 重置與基本設定 --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* --- 背景設定：馬卡龍柔和漸層與全畫面置中 --- */
+        body {
+            background: linear-gradient(135deg, #fde2e4 0%, #e2ece9 50%, #eee1f0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* --- 名片主體：圓角、柔和陰影與質感設定 --- */
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 350px;
+            border-radius: 28px;
+            padding: 40px 28px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(230, 185, 200, 0.25),
+                        0 5px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(220, 170, 190, 0.35);
+        }
+
+        /* --- 圓形大頭貼 --- */
+        .avatar-box {
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ffffff;
+            box-shadow: 0 8px 20px rgba(220, 170, 190, 0.3);
+        }
+
+        /* --- 文字樣式 --- */
+        .name {
+            font-size: 22px;
+            color: #4a403a;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .bio {
+            font-size: 14px;
+            color: #8c7a6b;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        /* --- 按鈕區與排列 --- */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            border-radius: 18px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        /* 馬卡龍粉 - Instagram 按鈕 */
+        .btn-instagram {
+            background-color: #f7d6e0;
+            color: #8a4b60;
+        }
+
+        .btn-instagram:hover {
+            background-color: #f2b5cb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(242, 181, 203, 0.5);
+        }
+
+        /* 馬卡龍藍紫 - Email 按鈕 */
+        .btn-email {
+            background-color: #e2e2f6;
+            color: #55558a;
+        }
+
+        .btn-email:hover {
+            background-color: #c9c9ee;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(201, 201, 238, 0.5);
+        }
+
+        .btn i {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="avatar-box">
+            <img src="https://i.postimg.cc/7hbjjRKL/unnamed.jpg" alt="大頭貼" class="avatar">
+        </div>
+
+        <h1 class="name">你的名字</h1>
+        <p class="bio">熱愛美感與設計，用馬卡龍色彩點亮每一天 ✨</p>
+
+        <div class="button-group">
+            <a href="https://www.instagram.com/" target="_blank" class="btn btn-instagram">
+                <i class="fa-brands fa-instagram"></i> Instagram
+            </a>
+            <a href="mailto:your-email@example.com" class="btn btn-email">
+                <i class="fa-regular fa-envelope"></i> Email 聯絡我
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
