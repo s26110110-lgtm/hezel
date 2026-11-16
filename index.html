@@ -1,4 +1,17 @@
 <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pen</title>
+  </head>
+  <body>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -14,6 +27,7 @@
             --neon-pink: #ff0055;
             --neon-yellow: #fcee0a;
             --neon-green: #00ff66;
+            --neon-purple: #b829ff;
             --dark-bg: #0a0a12;
             --card-bg: rgba(18, 18, 32, 0.75);
             --locked-color: #2a2a3a;
@@ -131,6 +145,15 @@
             box-shadow: 0 0 20px rgba(0, 255, 102, 0.4), inset 0 0 15px rgba(0, 255, 102, 0.2);
         }
 
+        .quest-card.w5-card {
+            border-color: rgba(184, 41, 255, 0.35);
+        }
+
+        .quest-card.w5-card:hover {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 20px rgba(184, 41, 255, 0.45), inset 0 0 15px rgba(184, 41, 255, 0.25);
+        }
+
         /* Locked Card */
         .locked-card {
             background: rgba(15, 15, 22, 0.6);
@@ -194,7 +217,7 @@
                 SYSTEM: ONLINE
             </span>
             <span class="tracking-widest">USER_ID: #DEV-2026-X</span>
-            <span>LEVEL: 04 / 18</span>
+            <span>LEVEL: 05 / 18</span>
         </div>
 
         <!-- Avatar Container -->
@@ -324,20 +347,29 @@
                 </div>
             </a>
 
-            <!-- ================= LOCKED QUESTS (5 - 18) ================= -->
+            <!-- Week 5 (Active) -->
+            <a href="w5/index.html" class="quest-card w5-card p-4 flex flex-col justify-between min-h-[130px] group">
+                <div class="hud-corner hud-tl" style="border-color: var(--neon-purple);"></div>
+                <div class="hud-corner hud-br" style="border-color: var(--neon-purple);"></div>
 
-            <!-- Week 5 -->
-            <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-mono text-gray-600">STAGE_05</span>
-                    <span class="text-sm">🔒</span>
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-bold text-purple-400 font-mono">STAGE_05</span>
+                    <span class="status-badge bg-purple-500/20 text-purple-300 border border-purple-400/50 font-bold">CLEARED</span>
                 </div>
+
                 <div>
-                    <h3 class="text-sm font-bold text-gray-500">Week 5 - 未解鎖</h3>
-                    <p class="text-[11px] text-gray-600 mt-1">任務鎖定中 (LOCKED)</p>
+                    <h3 class="text-base font-bold text-white group-hover:text-purple-300 transition-colors">
+                        Week 5 - 心電感應網
+                    </h3>
+                    <p class="text-[11px] text-gray-400 mt-1 font-mono">即時同步與默契連線互動</p>
                 </div>
-                <div class="text-[10px] text-gray-600 tracking-widest text-right mt-2 font-mono">RESTRICTED</div>
-            </div>
+
+                <div class="flex justify-end items-center mt-3 pt-2 border-t border-purple-500/20 text-xs text-purple-400 group-hover:translate-x-1 transition-transform">
+                    ENTER STAGE ➔
+                </div>
+            </a>
+
+            <!-- ================= LOCKED QUESTS (6 - 18) ================= -->
 
             <!-- Week 6 -->
             <div class="locked-card p-4 flex flex-col justify-between min-h-[130px]">
